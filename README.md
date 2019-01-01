@@ -1,5 +1,16 @@
 # LargeVis
 
+This fork provides a VS2017 sln file for building on Windows. You will need to:
+
+* Install Boost (easiest via [binaries](https://sourceforge.net/projects/boost/files/boost-binaries/))
+* Create a `BOOST_HOME` environment variable.
+* The solution uses `BOOST_HOME` for the Include and Library directories in the `VC++ Directories` section of the Properties. You will probably have to edit the Library Directory section because it is currently pointing at `$(BOOST_HOME)\lib64-msvc-14.1`, and you may not have that exact directory name inside your `BOOST_HOME`.
+* Also consider fiddling with the 'Platform Toolset' and 'Windows SDK Version' settings.
+
+I have made only a half-hearted attempt to turn on some optimization flags.
+
+Also I have added some code to print the time taken for the run on the command line. This uses some C++11 features. It's all obviously located in `main.cpp` and can be easily deleted.
+
 This is the *official* implementation of the **LargeVis** model by the original authors, which is used to visualize large-scale and high-dimensional data [(Tang, Liu, Zhang and Mei)](https://arxiv.org/abs/1602.00370). It now supports visualizing both high-dimensional feature vectors and networks. The package also contains a very efficient algorithm for constructing K-nearest neighbor graph (K-NNG).
 
 Contact person: Jian Tang, tangjianpku@gmail.com. This work is done when the author is in Microsoft Research Asia.
