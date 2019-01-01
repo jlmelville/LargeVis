@@ -2,6 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <iostream>
+#include <chrono>
+#include <ctime>   
 
 char infile[1000], outfile[1000];
 long long if_embed = 1, out_dim = -1, n_samples = -1, n_threads = -1, n_negative = -1, n_neighbors = -1, n_trees = -1, n_propagation = -1;
@@ -53,12 +56,26 @@ int main(int argc, char **argv)
 	if ((i = ArgPos((char *)"-gamma", argc, argv)) > 0) n_gamma = atof(argv[i + 1]);
 	if ((i = ArgPos((char *)"-perp", argc, argv)) > 0) perplexity = atof(argv[i + 1]);
 
+	auto start = std::chrono::system_clock::now();
+	std::time_t start_time = std::chrono::system_clock::to_time_t(start);
+
+	std::cout << "started computation at " << std::ctime(&start_time) << std::endl;
+
 	LargeVis model;
     if (if_embed)
         model.load_from_file(infile);
     else
         model.load_from_graph(infile);
 	model.run(out_dim, n_threads, n_samples, n_propagation, alpha, n_trees, n_negative, n_neighbors, n_gamma, perplexity);
+
+	// Some computation here
+	auto end = std::chrono::system_clock::now();
+
+	std::chrono::duration<double> elapsed_seconds = end - start;
+	std::time_t end_time = std::chrono::system_clock::to_time_t(end);
+
+	std::cout << "finished computation at " << std::ctime(&end_time)
+		<< "elapsed time: " << elapsed_seconds.count() << "s" << std::endl;
 
 	model.save(outfile);
 }
